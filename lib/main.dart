@@ -2,8 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:qr/qr.dart';
 import 'package:qr_reader/qr_reader.dart';
-
+import 'package:qr_flutter/qr_flutter.dart';
+import 'package:flutter/services.dart';
 void main() {
   runApp(new MyApp());
 }
@@ -31,6 +33,24 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   Future<String> _barcodeString;
+  String iso;
+
+  @override
+  void initState() {
+    iso = 'AU6PYJROj0gAkABEAAACynx6v2F9RwAAAAAUAAEAAAA=';
+    var ba64 = base64.decode(iso);
+    print(ba64);
+    iso = latin1.decode(ba64);
+    print(iso);
+    super.initState();
+  }
+
+  getData(String code) async{
+    print(code);
+    const platform = const MethodChannel('com.rq-exam/decode');
+    var result = await platform
+        .invokeMethod('decodeQr', {'data': code});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,17 +67,14 @@ class _MyHomePageState extends State<MyHomePage> {
                       '----------------------------------------------------------');
                   print(
                       '----------------------------------------------------------');
-                  // var string = 'AU6Ke0JOikgAkABEAAACyk8BNyRdJAAAAAAUAAEAAAA=';
-                  // var ba64 = base64.decode(string);
-                  // print(ba64);
-                  // var iso = latin1.decode(ba64);
-                  // print(iso);
+                  // setState(() {});
                   print(snapshot.data);
-                  var utf8st = utf8.encode(snapshot.data);
-                  print(utf8st);
-                  // var utf8Str = latin1.decode(utf8st);
-                  // print(utf8Str);
-                  var base64Str = base64.encode(utf8st);
+//                  getData(snapshot.data);
+                  // var utf8st = utf8.encode(snapshot.data);
+                  // print(utf8st);
+                  var utf8Str = latin1.encode('\u0001N`NH\u0000\u0000D\u0000\u0000\u0002Ê|z¿a}G\u0000\u0000\u0000\u0000\u0014\u0000\u0001\u0000\u0000\u0000');
+                  print(utf8Str);
+                  var base64Str = base64.encode(utf8Str);
                   print(base64Str);
                   // var iso = latin1.decode(base64Str, allowInvalid: true);
                   // print(iso);
@@ -66,7 +83,14 @@ class _MyHomePageState extends State<MyHomePage> {
                   print(
                       '----------------------------------------------------------');
                 }
-                return new Text(snapshot.data != null ? snapshot.data : '');
+                return snapshot.data != null
+                    ? Text(snapshot.data)
+                    : new QrImage(
+                        version: 4,
+                        data: '\u0001N`NH\u0000\u0000D\u0000\u0000\u0002Ê|z¿a}G\u0000\u0000\u0000\u0000\u0014\u0000\u0001\u0000\u0000\u0000',
+                        size: 200.0,
+                  errorCorrectionLevel: QrErrorCorrectLevel.L,
+                      );
               })),
       floatingActionButton: new FloatingActionButton(
         onPressed: () {
