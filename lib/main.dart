@@ -73,16 +73,19 @@ class _MyHomePageState extends State<MyHomePage> {
             if (snapshot.data != null) {
               print(
                   '----------------------------------------------------------');
-              print(
-                  '----------------------------------------------------------');
-              // setState(() {});
               print(snapshot.data);
 
+              print(
+                  '----------------------------------------------------------decrypting');
+
               var lat = Latin1Codec(allowInvalid: true);
-              print(lat.encode('ÿþýü'));
-              print('-----------------------------------' +
+              // print(lat.encode('ÿþýü'));
+              print('Decripted byte array-----------------------------------' +
                   lat.encode(snapshot.data).toString());
-              getData(snapshot.data);
+
+              print(
+                  '----------------------------------------------------------');
+              // getData(snapshot.data);
 
 //               var utf8st = utf8.encode(snapshot.data);
 //               print(utf8st);
