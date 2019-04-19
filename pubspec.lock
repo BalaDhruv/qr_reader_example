@@ -75,7 +75,7 @@ packages:
     source: hosted
     version: "1.4.0"
   qr:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: qr
       url: "https://pub.dartlang.org"
